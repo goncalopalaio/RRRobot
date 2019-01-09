@@ -25,16 +25,16 @@ class MainActivity : AppCompatActivity() {
 
         val read = read(dexFile)
 
-        Log.d(TAG, "Hello result: " + read?.run())
+        Log.d(TAG, "Hello result: " + read?.run(this))
     }
 
-    fun read(dex : File, cls : String = "com.gplio.rrrobot.common.Hello"): IRRRobot? {
+    fun read(dex : File, cls : String = "com.gplio.rrrobot.common.HelloLog"): IRRRobot? {
 
         try {
             val cacheDirectory = getDir("rrrobot-cache-outdex", Context.MODE_PRIVATE)
             Log.d(TAG, "CacheDirectory: $cacheDirectory")
 
-            val classLoader = DexClassLoader(dex.absolutePath, cacheDirectory.absolutePath,null, this.javaClass.classLoader)
+            val classLoader = DexClassLoader(dex.absolutePath, cacheDirectory.absolutePath,null, classLoader)
 
             val moduleClass = classLoader.loadClass(cls)
             return moduleClass.newInstance() as IRRRobot

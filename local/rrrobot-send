@@ -16,7 +16,7 @@ cp ../app/src/main/java/com/gplio/rrrobot/common/IRRRobot.java input/com/gplio/r
 echo "Running javac in input/"
 
 pushd input/;
-	javac *.java -d ../output/
+	javac -classpath /Users/goncalopalaio/Library/Android/sdk/platforms/android-28/android.jar:. *.java -d ../output/
 popd;
 
 echo "Running dex in input/"
