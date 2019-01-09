@@ -1,0 +1,28 @@
+
+GENERATED_DEX_FILE=rrrobot.dex
+
+DX=$USER_ANDROID_SDK/build-tools/28.0.3/dx
+ADB=$USER_ANDROID_SDK/platform-tools/adb
+
+echo "---"
+echo "Android SDK location: $USER_ANDROID_SDK"
+echo "Using dx in $DX"
+echo "Using adb in $ADB"
+echo "---"
+
+echo "Updating interface"
+cp ../app/src/main/java/com/gplio/rrrobot/common/IRRRobot.java input/com/gplio/rrrobot/common/
+
+echo "Running javac in input/"
+
+pushd input/;
+	javac *.java -d ../output/
+popd;
+
+echo "Running dex in input/"
+
+$DX --dex --verbose --output $GENERATED_DEX_FILE output/
+
+echo "Sending $GENERATED_DEX_FILE"
+
+$ADB push $GENERATED_DEX_FILE /sdcard/
