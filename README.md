@@ -1,6 +1,6 @@
 # RRRobot
 
-## What it does now:
+## What it does now
 
 ![Application running](https://github.com/goncalopalaio/RRRobot/blob/master/screenshots/initial_demo.gif?raw=true)
 
