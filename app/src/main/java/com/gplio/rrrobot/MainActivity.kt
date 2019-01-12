@@ -7,6 +7,7 @@ import android.os.Environment
 import android.util.Log
 import com.gplio.rrrobot.common.IRRRobot
 import dalvik.system.DexClassLoader
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -14,21 +15,31 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        btn_action.setOnClickListener {
+            reRun()
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-
+    private fun reRun() {
         val dexFile = File(Environment.getExternalStorageDirectory(), "rrrobot.dex")
         Log.d(TAG, "path:: dexFile: " + dexFile.absolutePath)
 
+        val cls = "com.gplio.rrrobot.common.HelloLog"
+        val read = read(dexFile, cls)
 
-        val read = read(dexFile)
+        val result = read?.run(this)
 
-        Log.d(TAG, "Hello result: " + read?.run(this))
+        Log.d(TAG, "Hello result: $result")
+        updateUi(cls, result)
     }
 
-    fun read(dex : File, cls : String = "com.gplio.rrrobot.common.HelloLog"): IRRRobot? {
+    private fun updateUi(title: String, body: String?) {
+        tv_title.text = title;
+        tv_body.text = body
+    }
+
+    fun read(dex : File, cls : String): IRRRobot? {
 
         try {
             val cacheDirectory = getDir("rrrobot-cache-outdex", Context.MODE_PRIVATE)

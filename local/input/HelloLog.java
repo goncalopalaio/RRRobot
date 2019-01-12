@@ -8,7 +8,7 @@ public class HelloLog implements IRRRobot {
     @Override
     public String run(Context context) {
 		Log.d("RRRobot.MainActivity", "I'm saying Hello from logcat");
-		Toast.makeText(context, "I'm bread", Toast.LENGTH_SHORT).show();
-        return "World";
+		Toast.makeText(context, "I'm running", Toast.LENGTH_SHORT).show();
+        return "Hello World!!!";
     }
 }
