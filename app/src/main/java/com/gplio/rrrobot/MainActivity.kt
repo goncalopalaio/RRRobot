@@ -1,6 +1,8 @@
 package com.gplio.rrrobot
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -9,8 +11,17 @@ import com.gplio.rrrobot.common.IRRRobot
 import dalvik.system.DexClassLoader
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import android.content.IntentFilter
+
+
 
 class MainActivity : AppCompatActivity() {
+    private val eventReceiver: BroadcastReceiver? = object : BroadcastReceiver() {
+        override fun onReceive(ctx: Context?, intent: Intent?) {
+            Log.d(TAG, "eventReceiver:: intent: $intent")
+            reRun()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +30,16 @@ class MainActivity : AppCompatActivity() {
         btn_action.setOnClickListener {
             reRun()
         }
+
+        val filter = IntentFilter()
+        filter.addAction(EVENT_RECEIVER_ACTION)
+        registerReceiver(eventReceiver, filter)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        unregisterReceiver(eventReceiver)
     }
 
     private fun reRun() {
@@ -58,5 +79,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "RRRobot.MainActivity"
+        const val EVENT_RECEIVER_ACTION = "$TAG.EVENT_RECEIVER_ACTION"
     }
 }

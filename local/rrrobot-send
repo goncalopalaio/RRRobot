@@ -26,3 +26,5 @@ $DX --dex --verbose --output $GENERATED_DEX_FILE output/
 echo "Sending $GENERATED_DEX_FILE"
 
 $ADB push $GENERATED_DEX_FILE /sdcard/
+
+$ADB shell am broadcast -a RRRobot.MainActivity.EVENT_RECEIVER_ACTION
