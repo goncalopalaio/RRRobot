@@ -17,6 +17,7 @@ import android.content.pm.PackageManager
 import android.support.v4.content.ContextCompat
 import android.support.v4.app.ActivityCompat
 import android.widget.Toast
+import com.gplio.rrrobot.common.DexLoader
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,10 +48,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
 
@@ -62,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "path:: dexFile: " + dexFile.absolutePath)
 
         val cls = "com.gplio.rrrobot.common.HelloLog"
-        val read = read(dexFile, cls)
+        val read = DexLoader.loadInstance(this, classLoader, dexFile, cls)
 
         val result = read?.run(this)
 
@@ -75,22 +72,6 @@ class MainActivity : AppCompatActivity() {
         tv_body.text = body
     }
 
-    fun read(dex: File, cls: String): IRRRobot? {
-
-        try {
-            val cacheDirectory = getDir("rrrobot-cache-outdex", Context.MODE_PRIVATE)
-            Log.d(TAG, "CacheDirectory: $cacheDirectory")
-
-            val classLoader = DexClassLoader(dex.absolutePath, cacheDirectory.absolutePath, null, classLoader)
-
-            val moduleClass = classLoader.loadClass(cls)
-            return moduleClass.newInstance() as IRRRobot
-        } catch (e: Exception) {
-            Log.e(TAG, e.message, e)
-        }
-
-        return null
-    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == PERMISSION_REQUEST_CODE && grantResults[0] != PackageManager.PERMISSION_GRANTED) {

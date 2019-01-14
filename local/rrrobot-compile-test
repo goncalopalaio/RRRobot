@@ -1,0 +1,48 @@
+#!/bin/bash
+
+if [ -z "${USER_ANDROID_SDK-}" ]; then
+  USER_ANDROID_SDK=~/Library/Android/sdk/
+  echo "************** Using fallback Android SDK path: $USER_ANDROID_SDK **************"
+fi
+
+
+DX=$USER_ANDROID_SDK/build-tools/28.0.3/dx
+ADB=$USER_ANDROID_SDK/platform-tools/adb
+ANDROID_JAR=$USER_ANDROID_SDK/platforms/android-28/android.jar
+
+echo "---"
+echo "Android SDK location: $USER_ANDROID_SDK"
+echo "Using dx in $DX"
+echo "Using adb in $ADB"
+echo "Using android.jar from $ANDROID_JAR"
+echo "---"
+
+GENERATED_DEX_FILE=rrrobot_test.dex
+
+echo "---"
+echo "Dex file: $GENERATED_DEX_FILE"
+echo "---"
+
+echo "---"
+UIAUTOMATOR_JAR="uiautomator-v18-2.1.3-sources.jar"
+echo "Fetching $UIAUTOMATOR_JAR"
+wget -U "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)" -nc http://repo.spring.io/libs-milestone/com/android/support/test/uiautomator/uiautomator-v18/2.1.3/$UIAUTOMATOR_JAR
+echo "---"
+
+echo "Copying interface"
+mkdir -p input/com/gplio/rrrobot/common/
+cp -v ../app/src/androidTest/java/com/gplio/rrrobot/common/IRRRobotTest.java input/com/gplio/rrrobot/common/
+
+echo "Copying files to compile"
+
+cp -v ../app/src/androidTest/java/com/gplio/rrrobot/tests/* input/
+
+echo "Running javac in input/"
+
+pushd input/;
+	javac -classpath $ANDROID_JAR:../$UIAUTOMATOR_JAR:. *.java -d ../output/
+popd;
+
+echo "Running dex in input/"
+
+$DX --dex --verbose --output $GENERATED_DEX_FILE output/
