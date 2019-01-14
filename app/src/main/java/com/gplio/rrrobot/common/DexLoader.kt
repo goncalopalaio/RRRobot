@@ -26,9 +26,5 @@ class DexLoader {
 
             return null
         }
-
-        fun loadRegularInstance(context: Context, parentClassLoader: ClassLoader, dex: File, cls: String): IRRRobot? {
-            return loadInstance(context, parentClassLoader, dex, cls) as IRRRobot
-        }
     }
 }
