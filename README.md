@@ -7,10 +7,10 @@ This will dynamically load a dex file during runtime and run any UiAutomator cod
 
 ## Why is this kinda pointless
 
-This is an exploration on how quick and dirty automation scripts can be done.
+This is an exploration of how quick and dirty automation scripts can be done.
 Since it's required to have almost all of Android SDK toolchain running and you still have to install an apk, it's kinda pointless.
-I don't think dynamically loading a dex file and running some UI test code doesn't bring much in this context.
-I think having a separate project with UIAutomator tests with custom parameters it's almost equivalent to this.
+I don't think dynamically loading a dex file and running some UI test code will bring much in this context.
+Having a separate project with UIAutomator tests with custom parameters it's almost equivalent to this.
 The main advantage of this is that you don't have to install a new apk each time you need to implement new functionality.
 This might be useful to someone, I don't know.
 
