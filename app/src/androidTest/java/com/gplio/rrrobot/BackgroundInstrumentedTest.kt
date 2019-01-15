@@ -7,6 +7,7 @@ import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import android.support.test.uiautomator.UiDevice
 import android.util.Log
+import android.widget.Toast
 import com.gplio.rrrobot.common.DexLoader
 import com.gplio.rrrobot.common.IRRRobotTest
 
@@ -36,34 +37,41 @@ class BackgroundInstrumentedTest {
 
         arguments = InstrumentationRegistry.getArguments()
 
-        log("setup: arguments: $arguments")
-
+        log("Arguments :: $arguments")
 
         val dexPath = arguments.getString(DEX_PATH_ARG, "")
         dexFile = File(Environment.getExternalStorageDirectory(), dexPath)
 
-        log("Using dex file ${dexFile.absolutePath}")
+        log("Using dex file :: ${dexFile.absolutePath}")
 
         classToRun = arguments.getString(CLASS_TO_RUN_ARG, "")
 
-        log("Class to run $classToRun")
+        log("Class to run :: $classToRun")
 
         log("Loading dex")
 
         loadedInstance = DexLoader.loadInstance(targetContext, targetContext.classLoader, dexFile, classToRun) as IRRRobotTest?
+
+        log("Loaded dex :: $loadedInstance")
     }
 
 
     @Test
     fun runDex() {
-        loadedInstance?.run(targetContext, device, arguments)
+        val output = loadedInstance?.run(targetContext, device, arguments)
+        log("Ran class :: $classToRun in dex :: $dexFile.")
+        log("Output :: $output")
     }
 
+    @Test
+    fun hello() {
+        log("hello")
+    }
 
     companion object {
         const val TAG = "RRRobot.BackgroundInstrumentedTest"
-        const val DEX_PATH_ARG = "DEX_PATH"
-        const val CLASS_TO_RUN_ARG = "CLASS_TO_RUN"
+        const val DEX_PATH_ARG = "dex_path"
+        const val CLASS_TO_RUN_ARG = "class_to_run"
 
         fun log(text : String) {
             Log.d(TAG, text)

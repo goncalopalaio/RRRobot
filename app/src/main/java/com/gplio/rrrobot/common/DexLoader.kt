@@ -2,7 +2,6 @@ package com.gplio.rrrobot.common
 
 import android.content.Context
 import android.util.Log
-import com.gplio.rrrobot.MainActivity
 import dalvik.system.DexClassLoader
 import java.io.File
 
@@ -10,9 +9,16 @@ class DexLoader {
     companion object {
         const val TAG = "RRRobot.DexLoader"
 
-        fun loadInstance(context: Context, parentClassLoader: ClassLoader, dex: File, cls: String): Any? {
+        fun loadInstance(context: Context, parentClassLoader: ClassLoader, dex: File, cls: String, forceNewCache: Boolean = true): Any? {
             try {
-                val cacheDirectory = context.getDir("rrrobot-cache-outdex", Context.MODE_PRIVATE)
+
+                val cacheFile = if (forceNewCache) {
+                    "rrrobot-cache-dex-${System.currentTimeMillis()}"
+                } else {
+                    "rrrobot-cache-dex"
+                }
+
+                val cacheDirectory = context.getDir(cacheFile, Context.MODE_PRIVATE)
 
                 Log.d(TAG, "CacheDirectory: $cacheDirectory")
 

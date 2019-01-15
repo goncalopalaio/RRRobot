@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ -z "${USER_ANDROID_SDK-}" ]; then
+  USER_ANDROID_SDK=~/Library/Android/sdk/
+  echo "************** Using fallback Android SDK path: $USER_ANDROID_SDK **************"
+fi
+
+DEX_FILE=$1
+CLASS_TO_RUN=$2
+
+echo "Dex file :: $DEX_FILE -- Class to run :: $CLASS_TO_RUN"
+
+ADB=$USER_ANDROID_SDK/platform-tools/adb
+
+$ADB shell am instrument -w -r   -e dex_path $DEX_FILE -e class_to_run $CLASS_TO_RUN -e debug false -e class 'com.gplio.rrrobot.BackgroundInstrumentedTest#runDex' com.gplio.rrrobot.test/android.support.test.runner.AndroidJUnitRunner
